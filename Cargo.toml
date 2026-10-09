@@ -1,0 +1,26 @@
+[package]
+name = "gray-openwiki"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "MIT"
+description = "Codebase wiki generator for gray — /wiki builds and refreshes .gray/wiki/"
+
+[lib]
+name = "gray_openwiki"
+path = "src/lib.rs"
+
+[[bin]]
+name = "gray-openwiki"
+path = "src/main.rs"
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+strip = true
