@@ -1,6 +1,6 @@
 # gray-openwiki
 
-Codebase wiki generator plugin for [gray](https://github.com/...) — a Rust
+Codebase wiki generator plugin for gray — a Rust
 sidecar that ports the pi `openwiki` package's core loop into gray's
 minimal non-channel plugin shape.
 
