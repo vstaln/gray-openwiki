@@ -188,7 +188,10 @@ fn sig_of(path: &Path) -> Option<FileSig> {
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_secs() as i64)
         .unwrap_or(0);
-    Some(FileSig { m: mtime, s: m.len() })
+    Some(FileSig {
+        m: mtime,
+        s: m.len(),
+    })
 }
 
 fn finish_scan(files: BTreeMap<String, FileSig>, truncated: bool) -> Scan {
@@ -252,7 +255,9 @@ pub fn scan(root: &Path) -> Scan {
         };
         for entry in entries.flatten() {
             let path = entry.path();
-            let Ok(rel) = path.strip_prefix(root) else { continue };
+            let Ok(rel) = path.strip_prefix(root) else {
+                continue;
+            };
             let rel = rel.to_string_lossy().replace('\\', "/");
             if rel.is_empty() || ignored_prefix(&rel, &ignore) {
                 continue;
@@ -395,7 +400,10 @@ fn begin_init(root: &Path) -> Value {
             ("ROOT", root.to_string_lossy().into_owned()),
             ("WIKI_DIR", WIKI_REL.to_string()),
             ("FILE_COUNT", scan.files.len().to_string()),
-            ("HEAD", pending.head.clone().unwrap_or_else(|| "unknown".into())),
+            (
+                "HEAD",
+                pending.head.clone().unwrap_or_else(|| "unknown".into()),
+            ),
             (
                 "TOP_DIRS",
                 if scan.top_dirs.is_empty() {
@@ -648,6 +656,7 @@ pub fn manifest() -> Value {
         "sidecar_args": ["sidecar"],
         "tools": [tool_definition()],
         "commands": ["/wiki"],
+        "command_descriptions": {"/wiki": "generate and refresh the repo wiki"},
         "hooks": ["prompt/context"],
         "completion": ["init", "update", "status", "path"],
     })
@@ -664,13 +673,12 @@ pub fn root_for(path_arg: Option<&str>, params: &Value) -> PathBuf {
                 .and_then(Value::as_str)
                 .map(PathBuf::from)
         })
-        .or_else(|| {
-            params
-                .get("cwd")
-                .and_then(Value::as_str)
-                .map(PathBuf::from)
-        })
-        .unwrap_or_else(|| std::env::current_dir().ok().unwrap_or_else(|| PathBuf::from(".")));
+        .or_else(|| params.get("cwd").and_then(Value::as_str).map(PathBuf::from))
+        .unwrap_or_else(|| {
+            std::env::current_dir()
+                .ok()
+                .unwrap_or_else(|| PathBuf::from("."))
+        });
     resolve_root(&hint)
 }
 

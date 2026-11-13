@@ -23,7 +23,11 @@ fn session_cwd(params: &Value) -> PathBuf {
         .and_then(Value::as_str)
         .or_else(|| params.get("cwd").and_then(Value::as_str))
         .map(PathBuf::from)
-        .unwrap_or_else(|| std::env::current_dir().ok().unwrap_or_else(|| PathBuf::from(".")));
+        .unwrap_or_else(|| {
+            std::env::current_dir()
+                .ok()
+                .unwrap_or_else(|| PathBuf::from("."))
+        });
     gray_openwiki::resolve_root(&hint)
 }
 
@@ -108,9 +112,7 @@ fn cli_root(args: &[String]) -> PathBuf {
             return gray_openwiki::resolve_root(&PathBuf::from(a));
         }
     }
-    gray_openwiki::resolve_root(
-        &std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")),
-    )
+    gray_openwiki::resolve_root(&std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")))
 }
 
 const USAGE: &str = "gray-openwiki — codebase wiki plugin for gray
