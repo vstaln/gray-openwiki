@@ -655,10 +655,16 @@ pub fn manifest() -> Value {
         "protocol": PROTOCOL,
         "sidecar_args": ["sidecar"],
         "tools": [tool_definition()],
+        "description": "generate and refresh the repo wiki",
         "commands": ["/wiki"],
         "command_descriptions": {"/wiki": "generate and refresh the repo wiki"},
         "hooks": ["prompt/context"],
-        "completion": ["init", "update", "status", "path"],
+        "completion": [
+            {"arg": "init", "description": "write the first wiki for this repo"},
+            {"arg": "update", "description": "refresh pages that changed"},
+            {"arg": "status", "description": "wiki freshness"},
+            {"arg": "path", "description": "print the wiki directory"},
+        ],
     })
 }
 
