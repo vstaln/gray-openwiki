@@ -106,10 +106,7 @@ fn bare_wiki_returns_generation_prompt() {
     assert!(prompt.contains(".gray/wiki"));
     assert!(prompt.contains("commit"));
     // The run staged a pending ledger for the agent to commit later.
-    assert!(tmp
-        .path()
-        .join(".gray/wiki/.ledger.pending.json")
-        .exists());
+    assert!(tmp.path().join(".gray/wiki/.ledger.pending.json").exists());
 }
 
 #[test]
